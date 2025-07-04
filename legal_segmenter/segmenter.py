@@ -2,6 +2,7 @@
 Functions for segmenting a legal text into a sequence of sentences.
 """
 
+import re
 from typing import List, Union, TypedDict
 
 from legal_segmenter.constants import *
@@ -191,34 +192,11 @@ class Segmenter:
         if "..." in word:
             return False
 
-        if word.endswith("."):
-            return True
-
-        if word.endswith(".)"):
-            return True
-
-        if word.endswith('."'):
-            return True
-
-        if word.endswith(".)"):
-            return True
-
-        if word.endswith(".”"):
-            return True
-
-        if word.endswith(".’"):
-            return True
-
-        if word.endswith("!"):
-            return True
-
-        if word.endswith("?"):
-            return True
-
-        if word.endswith(".”"):
-            return True
-
-        return False
+        # Should capture all the variations of terminal punctuation.
+        # A period, question mark, or exclamation mark, followed by paretheses or
+        # quotes.
+        pattern = r"[.\?!][)'\"”’]{0,3}"
+        return bool(re.search(pattern, word))
 
     def word_with_punctuation(self, word: str) -> bool:
         """
