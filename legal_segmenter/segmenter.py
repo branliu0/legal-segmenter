@@ -59,9 +59,7 @@ class Segmenter:
                 for s in string.split("\n"):
                     self.constants.add(s.strip())
 
-    def segment(
-        self, text: str, include_metadata: bool = False
-    ) -> Union[List[List[str]], List[Paragraph]]:
+    def segment(self, text: str) -> List[List[str]]:
         """
         Segments text into list of lists. The top level lists
         denote different paragraphs, and elements of the top level lists
@@ -70,9 +68,7 @@ class Segmenter:
         Args:
             text: input text to segment
         Returns:
-            paragraphs: list of paragraphs, each of which is a list of sentences. If include_metadata=False,
-            this is simply a list of lists of strings. If include_metadata=True, this is a list of Paragraph objects,
-            each of which contains a "sentences" key, which is a list of Sentence objects.
+            paragraphs: list of paragraphs, each of which is a list of sentences.
         """
         paragraphs = []
         curr_paragraph_offset = 0
@@ -169,8 +165,6 @@ class Segmenter:
             paragraphs.append(curr_paragraph)
             curr_paragraph_offset += len(paragraph_text) + 1
 
-        if include_metadata:
-            return paragraphs
         return [[s["text"] for s in p["sentences"]] for p in paragraphs]
 
     def _get_prior_word(self, words: List[str], i: int) -> str:
